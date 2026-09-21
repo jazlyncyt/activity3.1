@@ -13,9 +13,9 @@ data "aws_iam_policy_document" "github_trust" {
     }
 
     condition {
-      test     = "StringLike"
+      test     = "StringEquals"
       variable = "token.actions.githubusercontent.com:sub"
-      values   = ["repo:${var.github_repository_username}*/${var.github_repository_name}*:*"]
+      values   = ["repo:${var.github_repository_username}/${var.github_repository_name}:ref:refs/heads/main"]
     }
   }
 }
@@ -33,16 +33,19 @@ resource "aws_iam_role_policy_attachment" "s3_full" {
 variable "github_repository_username" {
   description = "GitHub repository username"
   type        = string
+  default     = "jazlyncyt"
 }
 
 variable "github_repository_name" {
   description = "GitHub repository name"
   type        = string
+  default     = "activity3.1"
 }
 
 variable "github_oidc_role_name" {
   description = "Name of the GitHub OIDC role"
   type        = string
+  default     = "github-actions-oidc-role"
 }
 
 output "github_oidc_role_arn" {
